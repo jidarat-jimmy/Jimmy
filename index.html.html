@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ระบบลงทะเบียนเข้าร่วมงาน</title>
+  <style>
+    body {
+      font-family: "Tahoma", sans-serif;
+      background: #f9f9f9;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #d63384;
+    }
+    input, select {
+      padding: 8px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .register { background: #0d6efd; color: white; }
+    .summary { background: #198754; color: white; }
+    .reset { background: #6c757d; color: white; }
+    .box {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      display: inline-block;
+      min-width: 300px;
+      text-align: left;
+    }
+    ul {
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>💒 ระบบลงทะเบียนเข้าร่วมงาน</h1>
+  <p>กรอกชื่อและเลือกฝ่าย</p>
+
+  <input type="text" id="nameInput" placeholder="กรอกชื่อผู้เข้าร่วม">
+  <select id="sideSelect">
+    <option value="groom">ฝ่ายเจ้าบ่าว</option>
+    <option value="bride">ฝ่ายเจ้าสาว</option>
+  </select>
+  <button class="register" onclick="registerGuest()">ลงทะเบียน</button>
+  <button class="summary" onclick="showSummary()">แสดงสรุป</button>
+  <button class="reset" onclick="resetData()">รีเซ็ต</button>
+
+  <div class="box" id="result">
+    <h3>📊 ผลสรุป</h3>
+    <p>ฝ่ายเจ้าบ่าว: <span id="groomCount">0</span> คน</p>
+    <p>ฝ่ายเจ้าสาว: <span id="brideCount">0</span> คน</p>
+    <p><b>รวมทั้งหมด: <span id="totalCount">0</span> คน</b></p>
+
+    <h4>📋 รายชื่อผู้เข้าร่วม</h4>
+    <ul id="guestList"></ul>
+  </div>
+
+  <script>
+    let guests = [];
+
+    function registerGuest() {
+      let name = document.getElementById("nameInput").value.trim();
+      let side = document.getElementById("sideSelect").value;
+
+      if (name === "") {
+        alert("⚠️ กรุณากรอกชื่อก่อนลงทะเบียน");
+        return;
+      }
+
+      guests.push({ name: name, side: side });
+      document.getElementById("nameInput").value = ""; // เคลียร์ช่องกรอก
+      alert("✅ ลงทะเบียนเรียบร้อยแล้ว");
+    }
+
+    function showSummary() {
+      let groom = guests.filter(g => g.side === "groom").length;
+      let bride = guests.filter(g => g.side === "bride").length;
+      let total = guests.length;
+
+      document.getElementById("groomCount").innerText = groom;
+      document.getElementById("brideCount").innerText = bride;
+      document.getElementById("totalCount").innerText = total;
+
+      let listHtml = "";
+      guests.forEach((g, i) => {
+        let sideText = g.side === "groom" ? "ฝ่ายเจ้าบ่าว" : "ฝ่ายเจ้าสาว";
+        listHtml += `<li>${i+1}. ${g.name} (${sideText})</li>`;
+      });
+      document.getElementById("guestList").innerHTML = listHtml;
+    }
+
+    function resetData() {
+      guests = [];
+      showSummary();
+      alert("🔄 รีเซ็ตข้อมูลเรียบร้อยแล้ว");
+    }
+  </script>
+</body>
+</html>
